@@ -5,10 +5,10 @@ import sys
 
 from RPA.PDF import PDF
 
-libStore = None
+library = None
 stdout = logging.StreamHandler(sys.stdout)
 
-logging.basicConfig(
+logging.basicCon\fig(
     level=logging.INFO,
     format="[{%(filename)s:%(lineno)d} %(levelname)s - %(message)s",
     handlers=[stdout],
@@ -18,7 +18,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def get_values_from_box():
-    values = libStore.find_text(
+    values = library.find_text(
         "coords:345,645,520,725", direction="box", only_closest=False
     )
     for item in values:
@@ -26,18 +26,18 @@ def get_values_from_box():
 
 
 def get_values_by_label():
-    LOGGER.info("Invoice Date: %s" % libStore.find_text("Invoice Date"))
-    LOGGER.info("Order Number: %s" % libStore.find_text("text:Order Number"))
+    LOGGER.info("Invoice Date: %s" % library.find_text("Invoice Date"))
+    LOGGER.info("Order Number: %s" % library.find_text("text:Order Number"))
     LOGGER.info(
         "Rate/Price: %s"
-        % libStore.find_text("text:Rate/Price", direction="down")
+        % library.find_text("text:Rate/Price", direction="down")
     )
-    LOGGER.info("Total: %s" % libStore.find_text("text:Total"))
+    LOGGER.info("Total: %s" % library.find_text("text:Total"))
 
 
 def get_text_from_pdf():
     regex = r".*\@.*\..*"
-    pages = libStore.get_text_from_pdf(details=True)
+    pages = library.get_text_from_pdf(details=True)
     for page in pages:
         for item in pages[page]:
             matches = re.findall(regex, item.text)
@@ -47,15 +47,15 @@ def get_text_from_pdf():
 
 def main():
     filename = Path(__file__).parent / "invoice.pdf"
-    libStore.open_pdf_document(filename)
+    library.open_pdf_document(filename)
     get_values_from_box()
     get_values_by_label()
     get_text_from_pdf()
 
 
 if __name__ == "__main__":
-    libStore = PDF()
+    library = PDF()
     try:
         main()
     finally:
-        libStore.close_all_pdf_documents()
+        library.close_all_pdf_documents()
