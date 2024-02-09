@@ -5,6 +5,8 @@ import sys
 
 from RPA.PDF import PDF
 
+# we have to get new value
+
 library = None
 stdout = logging.StreamHandler(sys.stdout)
 
